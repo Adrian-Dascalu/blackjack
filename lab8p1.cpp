@@ -47,14 +47,14 @@ class Pachet_Carti
         };
     
     private:
-        Carte_De_Joc cards[52];
+        Carte_De_Joc carti[52];
 
         int next_card;
         
         public:
             void Creeaza_Pachet(void)
             {
-                for (int i = 0; i < 52; i++) cards[i].Seteaza(i);
+                for (int i = 0; i < 52; i++) carti[i].Seteaza(i);
 
                 next_card = 0;
             }
@@ -71,9 +71,9 @@ class Pachet_Carti
                 {
                     k = rand() % 52;
             
-                    temp = cards[i];
-                    cards[i] = cards[k];
-                    cards[k] = temp;
+                    temp = carti[i];
+                    carti[i] = carti[k];
+                    carti[k] = temp;
                 }
             }
 
@@ -115,7 +115,7 @@ class Pachet_Carti
 
                     for(int k = 0; k < 2; k++)
                     {
-                        carti_mana[i][k] = cards[carti_impartite];
+                        carti_mana[i][k] = carti[carti_impartite];
 
                         if(carti_mana[i][k].transf() == 11)
                         {
@@ -222,7 +222,7 @@ class Pachet_Carti
 
             void hit(int i, int d)  
             {
-                carti_mana[i][nr_carte[i]] = cards[carti_impartite];
+                carti_mana[i][nr_carte[i]] = carti[carti_impartite];
                 suma_mana[i] += carti_mana[i][nr_carte[i]].transf();
 
                 if(carti_mana[i][nr_carte[i]].transf() == 11)
@@ -401,7 +401,7 @@ class Pachet_Carti
                     
                     if((dealer_win == 0) && (bust[i] == 0) && (blackjack[i] == 0) && (suma_mana[i] < 17) || (suma_mana[i] < 11))
                     {
-                        carti_mana[i][nr_carte[i]] = cards[carti_impartite];
+                        carti_mana[i][nr_carte[i]] = carti[carti_impartite];
                         suma_mana[i] += carti_mana[i][nr_carte[i]].transf();
 
                         if(carti_mana[i][nr_carte[i]].transf() == 11)
@@ -527,7 +527,7 @@ int main (void)
         else
         {
            cin.clear();
-           cout << "Baga ma un numar de jucatori intre 1 si 7 : ";
+           cout << "Numarul maxim de jucatori este intre 1 si 7, reintrodu un numar:\n";
         }
     }
 
