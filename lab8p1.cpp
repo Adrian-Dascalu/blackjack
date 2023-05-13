@@ -535,27 +535,27 @@ int main (void)
 
     Pachet_Carti::Carte_De_Joc carte;
 
-    Pachet_Carti poker;
+    Pachet_Carti blackjack;
 
-    poker.Creeaza_Pachet();
-
-   // system("clear");
-
-    poker.Amesteca();
+    blackjack.Creeaza_Pachet();
 
    // system("clear");
 
-    poker.Bet(n);
+    blackjack.Amesteca();
 
    // system("clear");
 
-    poker.impartire();
+    blackjack.Bet(n);
 
-    poker.afisare_masa();
+   // system("clear");
+
+    blackjack.impartire();
+
+    blackjack.afisare_masa();
     
     getchar();
    //
     system("clear");
 
-    poker.mana();
+    blackjack.mana();
 }
