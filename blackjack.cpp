@@ -95,7 +95,7 @@ class Pachet_Carti
                         else
                         {
                         cin.clear();
-                        cout << "Pune ma un bet numar real : ";
+                        cout << "Bet-ul trebuie sa fie numar real, reintrodu un numar : ";
                         }
                     }
                 };
@@ -155,7 +155,7 @@ class Pachet_Carti
 
                 cout << "Carti Dealer :\n";
                 carti_mana[nr_jucatori][0].Display();
-                cout << endl;
+                cout << endl << endl << "Apasa enter pentru next";
             }
 
             void alege(int i)
@@ -242,7 +242,7 @@ class Pachet_Carti
                         carti_mana[i][j].Display();
                     }
 
-                    cout << "\n\nsuma : 21\n\nBLACKJACK!" << endl;
+                    cout << "\n\nsuma : 21\n\nBLACKJACK!" << endl << "Enter pentru next" << endl;
                     getchar();
 
                     return;
@@ -265,7 +265,7 @@ class Pachet_Carti
                                     carti_mana[i][j].Display();
                                 }
 
-                                cout << "\n\nsuma : 21\n\nBLACKJACK!" << endl;
+                                cout << "\n\nsuma : 21\n\nBLACKJACK!" << endl << "Enter pentru next" << endl;
                                 getchar();
 
                                 return;
@@ -343,7 +343,7 @@ class Pachet_Carti
                     {
                         blackjack[i] = 1;
 
-                        cout << "\nBLACKJACK!" << endl;
+                        cout << "\nBLACKJACK!" << endl << "Enter pentru next" << endl;
                     }
                     else
                     {
@@ -431,6 +431,8 @@ class Pachet_Carti
                         carti_impartite++;
                     }
                 }
+
+                cout << "Masa finala:\n\n";
 
                 for(i = 0; i < nr_jucatori; i++)
                 {
@@ -554,7 +556,7 @@ int main (void)
     blackjack.afisare_masa();
     
     getchar();
-   //
+   
     system("clear");
 
     blackjack.mana();
