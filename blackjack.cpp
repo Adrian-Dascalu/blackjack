@@ -151,6 +151,7 @@ class Pachet_Carti
                     cout << endl << endl;
 
                     cout << "bet : " << suma_bet[i] << endl << endl;
+                    cout << "----------------" << endl << endl;
                 }
 
                 cout << "Carti Dealer :\n";
@@ -172,6 +173,8 @@ class Pachet_Carti
                 char tura[10];
 
                 cin >> tura;
+
+                cout << endl << "------------------------------" << endl;
 
                 if(strcmp(tura, "hit") == 0)
                 {
@@ -291,7 +294,7 @@ class Pachet_Carti
                     cout << "\n\nsuma : " << suma_mana[i];
                     bust[i] = 1;
 
-                    cout << "\n\nAi pierdut, ghinion\n\n---||---\n";
+                    cout << "\n\nAi pierdut, ghinion\n\n---||---\n\nEnter pentru next\n\n";
                     getchar();
 
                     return;
@@ -552,6 +555,8 @@ int main (void)
    // system("clear");
 
     blackjack.impartire();
+
+    system("clear");
 
     blackjack.afisare_masa();
     
