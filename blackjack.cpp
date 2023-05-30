@@ -146,7 +146,6 @@ class Pachet_Carti
                 for(int i = 0; i < nr_jucatori; i++)
                 {
                     cout << "Jucator " << i + 1 << " carti:\n";
-                   // cout << setprecision(30);
 
                     carti_mana[i][0].Display();
 
@@ -158,7 +157,6 @@ class Pachet_Carti
 
                     cout << endl << endl;
 
-                    //cout << "bet : " << suma_bet[i] << endl << endl;
                     cout << "--------------------\n\n";
                 }
 
@@ -182,7 +180,9 @@ class Pachet_Carti
 
                 cin >> tura;
 
-                cout << endl << "------------------------------" << endl;
+                getchar();
+
+                cout << "\n------------------------------\n";
 
                 if(strcmp(tura, "hit") == 0)
                 {
@@ -191,8 +191,6 @@ class Pachet_Carti
                 else if(strcmp(tura, "stay") == 0)
                 {
                     cout << endl;
-
-                    return;
                 }
                 else if((strcmp(tura, "double") == 0) && (nr_carte[i] == 2))
                 {
@@ -225,10 +223,12 @@ class Pachet_Carti
                 }
                 else
                 {
-                    cout << "ce vrei sa faci ma?\n";
+                    cout << "\nce vrei sa faci ma?\n";
 
                     alege(i);
                 }
+
+                return;
             }
 
             void hit(int i, int d)  
@@ -253,7 +253,7 @@ class Pachet_Carti
                         carti_mana[i][j].Display();
                     }
 
-                    cout << "Suma : 21\n\nBLACKJACK!\n" << endl << "Enter pentru next\n\n";
+                    cout << "Suma : 21\n\nBLACKJACK!\n" << endl << "Enter pentru next\n";
 
                     getchar();
 
@@ -283,7 +283,7 @@ class Pachet_Carti
 
                                 getchar();
 
-                                cout << "\n--------------------\n";
+                                cout << "--------------------\n\n";
 
                                 return;
                             }
@@ -311,7 +311,7 @@ class Pachet_Carti
                     cout << "Suma : " << suma_mana[i];
                     bust[i] = 1;
 
-                    cout << "\n\nAi pierdut, ghinion\n\nEnter pentru next\n";
+                    cout << "\n\nAi pierdut, ghinion\n\nEnter pentru next";
 
                     getchar();
 
@@ -367,7 +367,7 @@ class Pachet_Carti
                     {
                         blackjack[i] = 1;
 
-                        cout << "\nBLACKJACK!\n" << endl << "Enter pentru next\n";
+                        cout << "\nBLACKJACK DIN PRIMA!\n\nEnter pentru next\n";
                         
                         getchar();
 
@@ -481,7 +481,7 @@ class Pachet_Carti
                     }
                     else if((blackjack[i]) && (suma_mana[i] == suma_mana[nr_jucatori]))
                     {
-                        cout << "Egalitate, libertate, fraternitate, ai primit inapoi : " << suma_bet[i] << endl << endl;
+                        cout << "Libertate, egalitate, fraternitate, ai primit inapoi : " << suma_bet[i] << endl << endl;
                     }
                     else if(suma_mana[i] > suma_mana[nr_jucatori])
                     {
@@ -506,7 +506,7 @@ class Pachet_Carti
                     carti_mana[nr_jucatori][j].Display();
                 }
 
-                cout << "suma : " << suma_mana[i] << "\n--------------------\n";
+                cout << "suma : " << suma_mana[i] << "\n--------------------\n\n";
             }
 
             int dealer_win = 0;
