@@ -574,7 +574,7 @@ int main (void)
     blackjack.afisare_masa();
     
     getchar();
-   
+   //aranjare v0.03
     system("clear");
 
     blackjack.mana();
