@@ -1,13 +1,15 @@
+#include <ctime>
 #include <iostream>
+#include <iomanip>
 #include <stdlib.h>
 #include <conio.h>
 #include <stdio.h>
 #include <random>
 #include <time.h>
-#include <ctime>
 #include <cstdlib>
 #include <string.h>
 #include <sstream>
+
 
 using namespace std;
 
@@ -144,14 +146,20 @@ class Pachet_Carti
                 for(int i = 0; i < nr_jucatori; i++)
                 {
                     cout << "Jucator " << i + 1 << " carti:\n";
+                   // cout << setprecision(30);
 
                     carti_mana[i][0].Display();
+
+                    cout << "Bet : " << suma_bet[i];
+
                     carti_mana[i][1].Display();
+
+                    cout << "Suma : " << suma_mana[i];
 
                     cout << endl << endl;
 
-                    cout << "bet : " << suma_bet[i] << endl << endl;
-                    cout << "----------------" << endl << endl;
+                    //cout << "bet : " << suma_bet[i] << endl << endl;
+                    cout << "--------------------\n\n";
                 }
 
                 cout << "Carti Dealer :\n";
@@ -346,7 +354,7 @@ class Pachet_Carti
                     {
                         blackjack[i] = 1;
 
-                        cout << "\nBLACKJACK!" << endl << "Enter pentru next" << endl;
+                        cout << "\nBLACKJACK!\n" << endl << "Enter pentru next" << endl;
                     }
                     else
                     {
@@ -444,11 +452,9 @@ class Pachet_Carti
                     for(int j = 0; j < nr_carte[i]; j++)
                     {
                         carti_mana[i][j].Display();
-                    }
+                    }                  
                     
-                    cout << endl << endl;
-                    
-                    cout << "suma : " << suma_mana[i] << endl;
+                    cout << "suma : " << suma_mana[i] << endl << endl;
 
                     if(bust[i])
                     {
@@ -483,7 +489,7 @@ class Pachet_Carti
                     carti_mana[nr_jucatori][j].Display();
                 }
 
-                cout << "\n\nsuma : " << suma_mana[i] << endl;
+                cout << "suma : " << suma_mana[i] << endl;
             }
 
             int dealer_win = 0;
@@ -495,7 +501,7 @@ class Pachet_Carti
             int bust[8];
             int lose[8];
             int valori_c[13];
-            float suma_bet[8];
+            double suma_bet[8];
             int nr_jucatori;
             int suma_mana[8];
 
@@ -512,7 +518,14 @@ int Pachet_Carti::Carte_De_Joc::transf(void)
 
 void Pachet_Carti::Carte_De_Joc::Display(void)
 {
-    cout << endl << valoare_carte[Valoare()] << " DE " << culoare_carte[Culoare()];
+    int width = 7;
+
+    valoare_carte[Valoare()] == "10" ? width-- : 0;
+    culoare_carte[Culoare()] == "INIMA ROSIE" ? 0 : culoare_carte[Culoare()] == "INIMA NEAGRA" ? width-- : 0;
+    culoare_carte[Culoare()] == "ROMB" ? width += 7 : culoare_carte[Culoare()] == "TREFLA" ? width += 5 : 0;
+    
+    cout << endl; cout << valoare_carte[Valoare()] << " DE " << culoare_carte[Culoare()] << setw(width) << " ";
+    //delete ' << " "' for align with ":";
 }
 
 int main (void)
