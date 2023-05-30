@@ -253,8 +253,11 @@ class Pachet_Carti
                         carti_mana[i][j].Display();
                     }
 
-                    cout << "Suma : 21\n\nBLACKJACK!\n" << endl << "Enter pentru next" << endl;
+                    cout << "Suma : 21\n\nBLACKJACK!\n" << endl << "Enter pentru next\n\n";
+
                     getchar();
+
+                    cout << "--------------------\n\n";
 
                     return;
                 }
@@ -276,8 +279,11 @@ class Pachet_Carti
                                     carti_mana[i][j].Display();
                                 }
 
-                                cout << "Suma : 21\n\nBLACKJACK!\n" << endl << "Enter pentru next" << endl;
+                                cout << "Suma : 21\n\nBLACKJACK!\n" << endl << "Enter pentru next\n";
+
                                 getchar();
+
+                                cout << "\n--------------------\n";
 
                                 return;
                             }
@@ -288,7 +294,10 @@ class Pachet_Carti
                             }
 
                             cout << "Suma : " << suma_mana[i] << endl;
+                            
                             if(!d) alege(i);
+
+                            if(d == 1) cout << "\n--------------------\n\n";
 
                             return;
                         }
@@ -302,8 +311,11 @@ class Pachet_Carti
                     cout << "Suma : " << suma_mana[i];
                     bust[i] = 1;
 
-                    cout << "\n\nAi pierdut, ghinion\n\n---||---\n\nEnter pentru next\n\n";
+                    cout << "\n\nAi pierdut, ghinion\n\nEnter pentru next\n";
+
                     getchar();
+
+                    cout << "\n--------------------\n\n";
 
                     return;
                 }
@@ -322,7 +334,7 @@ class Pachet_Carti
                     cout << "Suma : " << suma_mana[i] << endl;
                 }
 
-                if(d == 1) cout << endl;
+                if(d == 1) cout << "\n--------------------\n\n";
 
                 if(!d) alege(i);
             }
@@ -355,14 +367,16 @@ class Pachet_Carti
                     {
                         blackjack[i] = 1;
 
-                        cout << "\nBLACKJACK!\n" << endl << "Enter pentru next" << endl;
+                        cout << "\nBLACKJACK!\n" << endl << "Enter pentru next\n";
+                        
+                        getchar();
+
+                        cout << "--------------------\n\n";
                     }
                     else
                     {
                         alege(i);
                     }
-
-                    getchar();
                 }
 
                 sfarsit();
