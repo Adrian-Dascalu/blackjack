@@ -469,7 +469,7 @@ class Pachet_Carti
                         carti_mana[i][j].Display();
                     }                  
                     
-                    cout << "suma : " << suma_mana[i] << endl << endl;
+                    cout << "Suma : " << suma_mana[i] << endl << endl;
 
                     if(bust[i])
                     {
@@ -506,7 +506,7 @@ class Pachet_Carti
                     carti_mana[nr_jucatori][j].Display();
                 }
 
-                cout << "suma : " << suma_mana[i] << "\n--------------------\n\n";
+                cout << "Suma : " << suma_mana[i] << "\n--------------------\n\n";
             }
 
             int dealer_win = 0;
