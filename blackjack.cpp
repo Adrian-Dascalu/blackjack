@@ -253,7 +253,7 @@ class Pachet_Carti
                         carti_mana[i][j].Display();
                     }
 
-                    cout << "\n\nsuma : 21\n\nBLACKJACK!" << endl << "Enter pentru next" << endl;
+                    cout << "Suma : 21\n\nBLACKJACK!\n" << endl << "Enter pentru next" << endl;
                     getchar();
 
                     return;
@@ -276,7 +276,7 @@ class Pachet_Carti
                                     carti_mana[i][j].Display();
                                 }
 
-                                cout << "\n\nsuma : 21\n\nBLACKJACK!" << endl << "Enter pentru next" << endl;
+                                cout << "Suma : 21\n\nBLACKJACK!\n" << endl << "Enter pentru next" << endl;
                                 getchar();
 
                                 return;
@@ -287,7 +287,7 @@ class Pachet_Carti
                                 carti_mana[i][j].Display();
                             }
 
-                            cout << "\n\nsuma : " << suma_mana[i] << endl;
+                            cout << "Suma : " << suma_mana[i] << endl;
                             if(!d) alege(i);
 
                             return;
@@ -299,7 +299,7 @@ class Pachet_Carti
                         carti_mana[i][j].Display();
                     }
 
-                    cout << "\n\nsuma : " << suma_mana[i];
+                    cout << "Suma : " << suma_mana[i];
                     bust[i] = 1;
 
                     cout << "\n\nAi pierdut, ghinion\n\n---||---\n\nEnter pentru next\n\n";
@@ -319,7 +319,7 @@ class Pachet_Carti
                         carti_mana[i][j].Display();
                     }
 
-                    cout << endl << endl << "suma : " << suma_mana[i] << endl;
+                    cout << "Suma : " << suma_mana[i] << endl;
                 }
 
                 if(d == 1) cout << endl;
@@ -344,11 +344,12 @@ class Pachet_Carti
                     cout << "Randul jucatorului " << i + 1 << endl;
 
                     carti_mana[i][0].Display();
-                    carti_mana[i][1].Display();
 
-                    cout << endl << endl;
-                    cout << "bet : " << suma_bet[i] << endl;
-                    cout << "suma : " << suma_mana[i] << endl;
+                    cout << "Bet : " << suma_bet[i];
+
+                    carti_mana[i][1].Display();
+                    
+                    cout << "Suma : " << suma_mana[i] << endl;
 
                     if(suma_mana[i] == 21)
                     {
@@ -480,6 +481,8 @@ class Pachet_Carti
                     {
                         cout << "Ai pierdut : " << suma_bet[i] << endl << endl;
                     }
+
+                    cout << "--------------------\n\n";
                 }
 
                 cout << "Mana dealer :\n";
@@ -489,7 +492,7 @@ class Pachet_Carti
                     carti_mana[nr_jucatori][j].Display();
                 }
 
-                cout << "suma : " << suma_mana[i] << endl;
+                cout << "suma : " << suma_mana[i] << "\n--------------------\n";
             }
 
             int dealer_win = 0;
