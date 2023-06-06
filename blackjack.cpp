@@ -537,9 +537,11 @@ void Pachet_Carti::Carte_De_Joc::Display(void)
 {
     int width = 7;
 
-    valoare_carte[Valoare()] == "10" ? width-- : 0;
-    culoare_carte[Culoare()] == "INIMA ROSIE" ? 0 : culoare_carte[Culoare()] == "INIMA NEAGRA" ? width-- : 0;
-    culoare_carte[Culoare()] == "ROMB" ? width += 7 : culoare_carte[Culoare()] == "TREFLA" ? width += 5 : 0;
+    valoare_carte[Valoare()] == "10" ? width--
+    : culoare_carte[Culoare()] == "INIMA ROSIE" ? 0
+    : culoare_carte[Culoare()] == "INIMA NEAGRA" ? width--
+    : culoare_carte[Culoare()] == "ROMB" ? width += 7
+    : culoare_carte[Culoare()] == "TREFLA" ? width += 5 : 0;
     
     cout << endl; cout << valoare_carte[Valoare()] << " DE " << culoare_carte[Culoare()] << setw(width) << " ";
     //delete ' << " "' for align with ":";
