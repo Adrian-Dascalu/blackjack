@@ -47,483 +47,484 @@ class Pachet_Carti
 
                 int transf(void);
         };
-    
+
     private:
         Carte_De_Joc carti[52];
 
         int next_card;
         
-        public:
-            void Creeaza_Pachet(void)
-            {
-                for (int i = 0; i < 52; i++) carti[i].Seteaza(i);
+    public:
+        void Creeaza_Pachet(void)
+        {
+            for (int i = 0; i < 52; i++) carti[i].Seteaza(i);
 
-                next_card = 0;
-            }
+            next_card = 0;
+        }
 
-            void Amesteca(void)
-            {
-                int i, k;
-            
-                Carte_De_Joc temp;
+        void Amesteca(void)
+        {
+            int i, k;
         
-                srand(time(NULL));
-                
-                for(i = 0; i < 52; i++)
-                {
-                    k = rand() % 52;
+            Carte_De_Joc temp;
+    
+            srand(time(NULL));
             
-                    temp = carti[i];
-                    carti[i] = carti[k];
-                    carti[k] = temp;
+            for(i = 0; i < 52; i++)
+            {
+                k = rand() % 52;
+        
+                temp = carti[i];
+                carti[i] = carti[k];
+                carti[k] = temp;
+            }
+        }
+
+        class JucatorSplit
+        {
+            private:
+                Carte_De_Joc carte_mana[8][10];
+
+            public:
+                JucatorSplit(Carte_De_Joc carte_manaa, int i, int carti_impartite, Carte_De_Joc carti[])
+                {
+                    carte_mana[0][0] = carte_manaa;
+                    carte_mana[0][1] = carti[carti_impartite];
                 }
-            }
 
-            void Bet(int n)
-            {
-                string user_input;
-
-                for(int i = 0; i < n; i++)
+                ~JucatorSplit(){}
+        
+                void hitsplit(int i)
                 {
-                    cout << "Bet jucator " << i + 1 << " : ";
-                    while(1)
-                    {
-                        getline(cin, user_input);
-                        stringstream convert(user_input);
-                        if(convert >> suma_bet[i] &&!(convert >> user_input))
-                        {
-                            break;
-                        }
-                        else
-                        {
-                        cin.clear();
-                        cout << "Bet-ul trebuie sa fie numar real, reintrodu un numar : ";
-                        }
-                    }
-                };
+                    //hit(i, 0);
 
-                nr_jucatori = n;
-            }
+                    //carte_mana[0][0] = 
+                }
+        };
 
-            void impartire()
+        void Bet(int n);
+
+        void impartire()
+        {
+            for(int i = 0; i <= nr_jucatori; i++)
             {
-                for(int i = 0; i <= nr_jucatori; i++)
+                nr_asi[i] = 0;
+                nr_asi1[i] = 0;
+                bust[i] = 0;
+                blackjack[i] = 0;
+                nr_carte[i] = 2;   
+
+                for(int k = 0; k < 2; k++)
                 {
-                    nr_asi[i] = 0;
-                    nr_asi1[i] = 0;
-                    bust[i] = 0;
-                    blackjack[i] = 0;
-                    nr_carte[i] = 2;   
+                    carti_mana[i][k] = carti[carti_impartite];
 
-                    for(int k = 0; k < 2; k++)
+                    if(carti_mana[i][k].transf() == 11)
                     {
-                        carti_mana[i][k] = carti[carti_impartite];
-
-                        if(carti_mana[i][k].transf() == 11)
-                        {
-                            nr_asi[i]++;
-                        }
-                        
-                        carti_impartite++;
+                        nr_asi[i]++;
                     }
-
-                    suma_mana[i] = carti_mana[i][0].transf() + carti_mana[i][1].transf();
                     
-                    if(suma_mana[i] > 21)
-                    {
-                        suma_mana[i] -= 10;
-                        nr_asi1[i]++;
-                    }
-                    else if(suma_mana[i] == 21)
-                    {
-                        blackjack[i] = 1;
-                    }
+                    carti_impartite++;
+                }
+
+                suma_mana[i] = carti_mana[i][0].transf() + carti_mana[i][1].transf();
+                
+                if(suma_mana[i] > 21)
+                {
+                    suma_mana[i] -= 10;
+                    nr_asi1[i]++;
+                }
+                else if(suma_mana[i] == 21)
+                {
+                    blackjack[i] = 1;
                 }
             }
+        }
 
-            void afisare_masa()
+        void afisare_masa()
+        {
+            for(int i = 0; i < nr_jucatori; i++)
             {
-                for(int i = 0; i < nr_jucatori; i++)
-                {
-                    cout << "Jucator " << i + 1 << " carti:\n";
+                cout << "Jucator " << i + 1 << " carti:\n";
 
-                    carti_mana[i][0].Display();
+                carti_mana[i][0].Display();
 
-                    cout << "Bet : " << suma_bet[i];
+                cout << "Bet : " << suma_bet[i];
 
-                    carti_mana[i][1].Display();
+                carti_mana[i][1].Display();
 
-                    cout << "Suma : " << suma_mana[i];
+                cout << "Suma : " << suma_mana[i];
 
-                    cout << endl << endl;
+                cout << endl << endl;
 
-                    cout << "--------------------\n\n";
-                }
-
-                cout << "Carti Dealer :\n";
-                carti_mana[nr_jucatori][0].Display();
-                cout << endl << endl << "Apasa enter pentru next";
+                cout << "--------------------\n\n";
             }
 
-            void alege(int i)
+            cout << "Carti Dealer :\n";
+            carti_mana[nr_jucatori][0].Display();
+            cout << endl << endl << "Apasa enter pentru next";
+        }
+
+        void alege(int i)
+        {
+            if(nr_carte[i] == 2)
             {
-                if(nr_carte[i] == 2)
-                {
-                    cout << "\nhit / stay / double / split\n";
-                }
-                else
-                {
-                    cout << "\nhit / stay\n";
-                }
+                cout << "\nhit / stay / double / split\n";
+            }
+            else
+            {
+                cout << "\nhit / stay\n";
+            }
 
-                char tura[10];
+            char tura[10];
 
-                cin >> tura;
+            cin >> tura;
 
-                getchar();
+            getchar();
 
-                cout << "\n------------------------------\n";
+            cout << "\n------------------------------\n";
 
-                if(strcmp(tura, "hit") == 0)
-                {
-                    hit(i, 0);
-                }
-                else if(strcmp(tura, "stay") == 0)
-                {
-                    cout << endl;
-                }
-                else if((strcmp(tura, "double") == 0) && (nr_carte[i] == 2))
-                {
-                    suma_bet[i] *= 2;
-                    hit(i, 1);
-
-                    return;
-                }
-                else if((strcmp(tura, "split") == 0) && (nr_carte[i] == 2))
-                {
-                    if(carti_mana[i][0].transf() == carti_mana[i][1].transf())
-                    {
-                        nr_asi1[i] = 0;
-                        cout << "\nprima mana : \n";
-                        suma_mana[i] = carti_mana[i][0].transf();
-                        carti_split[i][0][0] = carti_mana[i][0];
-                        hitsplit1(i);
-
-                        nr_asi1[1] = 0;
-                        cout << "\na doua mana : \n";
-                        suma_mana[i] = carti_mana[i][1].transf();
-                        carti_split[i][1][0] = carti_mana[i][1];
-                        hitsplit2(i);
-                    }
-                    else
-                    {
-                        cout << "nu poti da split";
-                        alege(i);
-                    }
-                }
-                else
-                {
-                    cout << "\nce vrei sa faci ma?\n";
-
-                    alege(i);
-                }
+            if(strcmp(tura, "hit") == 0)
+            {
+                hit(i, 0);
+            }
+            else if(strcmp(tura, "stay") == 0)
+            {
+                cout << endl;
+            }
+            else if((strcmp(tura, "double") == 0) && (nr_carte[i] == 2))
+            {
+                suma_bet[i] *= 2;
+                hit(i, 1);
 
                 return;
             }
-
-            void hit(int i, int d)  
+            else if((strcmp(tura, "split") == 0) && (nr_carte[i] == 2))
             {
-                carti_mana[i][nr_carte[i]] = carti[carti_impartite];
-                suma_mana[i] += carti_mana[i][nr_carte[i]].transf();
-
-                if(carti_mana[i][nr_carte[i]].transf() == 11)
+                if(carti_mana[i][0].transf() == carti_mana[i][1].transf())
                 {
-                    nr_asi[i]++;
+                    //JucatorSplit jucatorsplit1(carti_mana[i][0]);
+                    nr_asi1[i] = 0;
+                    cout << "\nprima mana : \n";
+                    suma_mana[i] = carti_mana[i][0].transf();
+                    carti_split[i][0][0] = carti_mana[i][0];
+                    hitsplit1(i);
+
+                    nr_asi1[1] = 0;
+                    cout << "\na doua mana : \n";
+                    suma_mana[i] = carti_mana[i][1].transf();
+                    carti_split[i][1][0] = carti_mana[i][1];
+                    hitsplit2(i);
+                }
+                else
+                {
+                    cout << "nu poti da split";
+                    
+                    alege(i);
+                }
+            }
+            else
+            {
+                cout << "\nce vrei sa faci ma?\n";
+
+                alege(i);
+            }
+
+            return;
+        }
+
+        void hit(int i, int d)  
+        {
+            carti_mana[i][nr_carte[i]] = carti[carti_impartite];
+            suma_mana[i] += carti_mana[i][nr_carte[i]].transf();
+
+            if(carti_mana[i][nr_carte[i]].transf() == 11)
+            {
+                nr_asi[i]++;
+            }
+
+            carti_impartite++;
+            nr_carte[i]++;
+
+            if(suma_mana[i] == 21)
+            {
+                blackjack[i] = 1;
+
+                for(int j = 0; j < nr_carte[i]; j++)
+                {
+                    carti_mana[i][j].Display();
                 }
 
-                carti_impartite++;
-                nr_carte[i]++;
+                cout << "Suma : 21\n\nBLACKJACK!\n" << endl << "Enter pentru next\n";
 
-                if(suma_mana[i] == 21)
+                getchar();
+
+                cout << "--------------------\n\n";
+
+                return;
+            }
+            else if(suma_mana[i] > 21)
+            {   
+                for(int j = 0; j < nr_carte[i]; j++)
                 {
-                    blackjack[i] = 1;
-
-                    for(int j = 0; j < nr_carte[i]; j++)
+                    if(nr_asi[i] > nr_asi1[i])
                     {
-                        carti_mana[i][j].Display();
-                    }
+                        suma_mana[i] -= 10;
+                        nr_asi1[i]++;
 
-                    cout << "Suma : 21\n\nBLACKJACK!\n" << endl << "Enter pentru next\n";
-
-                    getchar();
-
-                    cout << "--------------------\n\n";
-
-                    return;
-                }
-                else if(suma_mana[i] > 21)
-                {   
-                    for(int j = 0; j < nr_carte[i]; j++)
-                    {
-                        if(nr_asi[i] > nr_asi1[i])
+                        if(suma_mana[i] == 21)
                         {
-                            suma_mana[i] -= 10;
-                            nr_asi1[i]++;
-
-                            if(suma_mana[i] == 21)
-                            {
-                                blackjack[i] = 1;
-
-                                for(int j = 0; j < nr_carte[i]; j++)
-                                {
-                                    carti_mana[i][j].Display();
-                                }
-
-                                cout << "Suma : 21\n\nBLACKJACK!\n" << endl << "Enter pentru next\n";
-
-                                getchar();
-
-                                cout << "--------------------\n\n";
-
-                                return;
-                            }
+                            blackjack[i] = 1;
 
                             for(int j = 0; j < nr_carte[i]; j++)
                             {
                                 carti_mana[i][j].Display();
                             }
 
-                            cout << "Suma : " << suma_mana[i] << endl;
-                            
-                            if(!d) alege(i);
+                            cout << "Suma : 21\n\nBLACKJACK!\n" << endl << "Enter pentru next\n";
 
-                            if(d == 1) cout << "\n--------------------\n\n";
+                            getchar();
+
+                            cout << "--------------------\n\n";
 
                             return;
                         }
+
+                        for(int j = 0; j < nr_carte[i]; j++)
+                        {
+                            carti_mana[i][j].Display();
+                        }
+
+                        cout << "Suma : " << suma_mana[i] << endl;
+                        
+                        if(!d) alege(i);
+
+                        if(d == 1) cout << "\n--------------------\n\n";
+
+                        return;
                     }
+                }
 
-                    for(int j = 0; j < nr_carte[i]; j++)
-                    {
-                        carti_mana[i][j].Display();
-                    }
+                for(int j = 0; j < nr_carte[i]; j++)
+                {
+                    carti_mana[i][j].Display();
+                }
 
-                    cout << "Suma : " << suma_mana[i];
-                    bust[i] = 1;
+                cout << "Suma : " << suma_mana[i];
+                bust[i] = 1;
 
-                    cout << "\n\nAi pierdut, ghinion\n\nEnter pentru next";
+                cout << "\n\nAi pierdut, ghinion\n\nEnter pentru next";
 
+                getchar();
+
+                cout << "\n--------------------\n\n";
+
+                return;
+            }
+            else
+            {
+                for(int j = 0; j < nr_carte[i]; j++)
+                {
+                    if((d == 2) && (j == 0))
+                    {}
+                    else if((d == 3) && (j == 1))
+                    {}
+                    else
+                    carti_mana[i][j].Display();
+                }
+
+                cout << "Suma : " << suma_mana[i] << endl;
+            }
+
+            if(d == 1) cout << "\n--------------------\n\n";
+
+            if(!d) alege(i);
+        }
+
+        void hitsplit1(int i)
+        {
+
+        }
+
+        void hitsplit2(int i)
+        {
+
+        }
+
+        void mana()
+        {
+            for(int i = 0; i < nr_jucatori; i++)
+            {
+                cout << "Randul jucatorului " << i + 1 << endl;
+
+                carti_mana[i][0].Display();
+
+                cout << "Bet : " << suma_bet[i];
+
+                carti_mana[i][1].Display();
+                
+                cout << "Suma : " << suma_mana[i] << endl;
+
+                if(suma_mana[i] == 21)
+                {
+                    blackjack[i] = 1;
+
+                    cout << "\nBLACKJACK DIN PRIMA!\n\nEnter pentru next\n";
+                    
                     getchar();
 
-                    cout << "\n--------------------\n\n";
-
-                    return;
+                    cout << "--------------------\n\n";
                 }
                 else
                 {
-                    for(int j = 0; j < nr_carte[i]; j++)
-                    {
-                        if((d == 2) && (j == 0))
-                        {}
-                        else if((d == 3) && (j == 1))
-                        {}
-                        else
-                        carti_mana[i][j].Display();
-                    }
-
-                    cout << "Suma : " << suma_mana[i] << endl;
+                    alege(i);
                 }
-
-                if(d == 1) cout << "\n--------------------\n\n";
-
-                if(!d) alege(i);
             }
 
-            void hitsplit1(int i)
-            {
+            sfarsit();
+        }
 
+        void sfarsit()
+        {
+            int i = nr_jucatori;
+
+            if(suma_mana[i] == 21)
+            {
+                blackjack[i] = 1;
             }
 
-            void hitsplit2(int i)
+            while((bust[i] == 0) && (dealer_win == 0) && (blackjack[i] == 0))
             {
-
-            }
-
-            void mana()
-            {
-                for(int i = 0; i < nr_jucatori; i++)
-                {
-                    cout << "Randul jucatorului " << i + 1 << endl;
-
-                    carti_mana[i][0].Display();
-
-                    cout << "Bet : " << suma_bet[i];
-
-                    carti_mana[i][1].Display();
-                    
-                    cout << "Suma : " << suma_mana[i] << endl;
-
-                    if(suma_mana[i] == 21)
-                    {
-                        blackjack[i] = 1;
-
-                        cout << "\nBLACKJACK DIN PRIMA!\n\nEnter pentru next\n";
-                        
-                        getchar();
-
-                        cout << "--------------------\n\n";
-                    }
-                    else
-                    {
-                        alege(i);
-                    }
-                }
-
-                sfarsit();
-            }
-
-            void sfarsit()
-            {
-                int i = nr_jucatori;
-
                 if(suma_mana[i] == 21)
                 {
                     blackjack[i] = 1;
                 }
 
-                while((bust[i] == 0) && (dealer_win == 0) && (blackjack[i] == 0))
+                for(int j = 0; j < nr_jucatori; j++)
                 {
+                    if(bust[j])
+                    {
+                        dealer_win++;
+                    }
+                }
+
+                if(dealer_win >= nr_jucatori / 2)
+                {
+                    dealer_win = 1;
+                }
+                else
+                {
+                    dealer_win = 0;
+                }
+
+                for(int j = 0; j < nr_jucatori; j++)
+                {
+                    if(suma_mana[i] > suma_mana[j])
+                    {
+                        dealer_win = 1;
+
+                        break;
+                    }
+                }
+                
+                if((dealer_win == 0) && (bust[i] == 0) && (blackjack[i] == 0) && (suma_mana[i] < 17) || (suma_mana[i] < 11))
+                {
+                    carti_mana[i][nr_carte[i]] = carti[carti_impartite];
+                    suma_mana[i] += carti_mana[i][nr_carte[i]].transf();
+
+                    if(carti_mana[i][nr_carte[i]].transf() == 11)
+                    {
+                        nr_asi[i] += 1;
+                    }
+
                     if(suma_mana[i] == 21)
                     {
                         blackjack[i] = 1;
                     }
 
-                    for(int j = 0; j < nr_jucatori; j++)
+                    if(suma_mana[i] > 21)
                     {
-                        if(bust[j])
+                        if(nr_asi[i] > nr_asi1[i])
                         {
-                            dealer_win++;
+                            suma_mana[i] -= 10;
+                            nr_asi1[i]++;
+                        }
+                        else
+                        {
+                            bust[i] = 1;
                         }
                     }
 
-                    if(dealer_win >= nr_jucatori / 2)
-                    {
-                        dealer_win = 1;
-                    }
-                    else
-                    {
-                        dealer_win = 0;
-                    }
-
-                    for(int j = 0; j < nr_jucatori; j++)
-                    {
-                        if(suma_mana[i] > suma_mana[j])
-                        {
-                            dealer_win = 1;
-
-                            break;
-                        }
-                    }
-                    
-                    if((dealer_win == 0) && (bust[i] == 0) && (blackjack[i] == 0) && (suma_mana[i] < 17) || (suma_mana[i] < 11))
-                    {
-                        carti_mana[i][nr_carte[i]] = carti[carti_impartite];
-                        suma_mana[i] += carti_mana[i][nr_carte[i]].transf();
-
-                        if(carti_mana[i][nr_carte[i]].transf() == 11)
-                        {
-                            nr_asi[i] += 1;
-                        }
-
-                        if(suma_mana[i] == 21)
-                        {
-                            blackjack[i] = 1;
-                        }
-
-                        if(suma_mana[i] > 21)
-                        {
-                            if(nr_asi[i] > nr_asi1[i])
-                            {
-                                suma_mana[i] -= 10;
-                                nr_asi1[i]++;
-                            }
-                            else
-                            {
-                                bust[i] = 1;
-                            }
-                        }
-
-                        nr_carte[i]++;
-                        carti_impartite++;
-                    }
+                    nr_carte[i]++;
+                    carti_impartite++;
                 }
-
-                cout << "Masa finala:\n\n";
-
-                for(i = 0; i < nr_jucatori; i++)
-                {
-                    cout << "Jucator : " << i + 1 << endl;
-
-                    for(int j = 0; j < nr_carte[i]; j++)
-                    {
-                        carti_mana[i][j].Display();
-                    }                  
-                    
-                    cout << "Suma : " << suma_mana[i] << endl << endl;
-
-                    if(bust[i])
-                    {
-                        cout << "Bust, ai pierdut : " << suma_bet[i] << endl << endl;
-                    }
-                    else if((blackjack[i]) && ((suma_mana[i] > suma_mana[nr_jucatori]) || (suma_mana[i] < suma_mana[nr_jucatori])))
-                    {
-                        cout << "Blackjack, ai castigat : " << suma_bet[i] * 2 << endl << endl;
-                    }
-                    else if((blackjack[i]) && (suma_mana[i] == suma_mana[nr_jucatori]))
-                    {
-                        cout << "Libertate, egalitate, fraternitate, ai primit inapoi : " << suma_bet[i] << endl << endl;
-                    }
-                    else if(suma_mana[i] > suma_mana[nr_jucatori])
-                    {
-                        cout << "Ai castigat : " << suma_bet[i] * 2 << endl << endl;
-                    }
-                    else if(bust[nr_jucatori])
-                    {
-                        cout << "Ai castigat : " << suma_bet[i] * 2 << endl << endl;
-                    }
-                    else
-                    {
-                        cout << "Ai pierdut : " << suma_bet[i] << endl << endl;
-                    }
-
-                    cout << "--------------------\n\n";
-                }
-
-                cout << "Mana dealer :\n";
-                
-                for(int j = 0; j < nr_carte[nr_jucatori]; j++)
-                {
-                    carti_mana[nr_jucatori][j].Display();
-                }
-
-                cout << "Suma : " << suma_mana[i] << "\n--------------------\n\n";
             }
 
-            int dealer_win = 0;
-            int nr_asi[8];
-            int nr_asi1[8];
-            int carti_impartite = 0;
-            int nr_carte[8];
-            int blackjack[8];
-            int bust[8];
-            int lose[8];
-            int valori_c[13];
-            double suma_bet[8];
-            int nr_jucatori;
-            int suma_mana[8];
+            cout << "Masa finala:\n\n";
 
-            Carte_De_Joc carti_split[8][10][2];
-            Carte_De_Joc carti_mana[8][10];
+            for(i = 0; i < nr_jucatori; i++)
+            {
+                cout << "Jucator : " << i + 1 << endl;
+
+                for(int j = 0; j < nr_carte[i]; j++)
+                {
+                    carti_mana[i][j].Display();
+                }                  
+                
+                cout << "Suma : " << suma_mana[i] << endl << endl;
+
+                if(bust[i])
+                {
+                    cout << "Bust, ai pierdut : " << suma_bet[i] << endl << endl;
+                }
+                else if((blackjack[i]) && ((suma_mana[i] > suma_mana[nr_jucatori]) || (suma_mana[i] < suma_mana[nr_jucatori])))
+                {
+                    cout << "Blackjack, ai castigat : " << suma_bet[i] * 2 << endl << endl;
+                }
+                else if((blackjack[i]) && (suma_mana[i] == suma_mana[nr_jucatori]))
+                {
+                    cout << "Libertate, egalitate, fraternitate, ai primit inapoi : " << suma_bet[i] << endl << endl;
+                }
+                else if(suma_mana[i] > suma_mana[nr_jucatori])
+                {
+                    cout << "Ai castigat : " << suma_bet[i] * 2 << endl << endl;
+                }
+                else if(bust[nr_jucatori])
+                {
+                    cout << "Ai castigat : " << suma_bet[i] * 2 << endl << endl;
+                }
+                else
+                {
+                    cout << "Ai pierdut : " << suma_bet[i] << endl << endl;
+                }
+
+                cout << "--------------------\n\n";
+            }
+
+            cout << "Mana dealer :\n";
+            
+            for(int j = 0; j < nr_carte[nr_jucatori]; j++)
+            {
+                carti_mana[nr_jucatori][j].Display();
+            }
+
+            cout << "Suma : " << suma_mana[i] << "\n--------------------\n\n";
+        }
+
+        int dealer_win = 0;
+        int nr_asi[8];
+        int nr_asi1[8];
+        int carti_impartite = 0;
+        int nr_carte[8];
+        int blackjack[8];
+        int bust[8];
+        int lose[8];
+        int valori_c[13];
+        double suma_bet[8];
+        int nr_jucatori;
+        int suma_mana[8];
+
+        Carte_De_Joc carti_split[8][10][2];
+        Carte_De_Joc carti_mana[8][10];
+
 };
 
 int Pachet_Carti::Carte_De_Joc::transf(void)
@@ -537,14 +538,40 @@ void Pachet_Carti::Carte_De_Joc::Display(void)
 {
     int width = 7;
 
-    valoare_carte[Valoare()] == "10" ? width--
-    : culoare_carte[Culoare()] == "INIMA ROSIE" ? 0
-    : culoare_carte[Culoare()] == "INIMA NEAGRA" ? width--
-    : culoare_carte[Culoare()] == "ROMB" ? width += 7
-    : culoare_carte[Culoare()] == "TREFLA" ? width += 5 : 0;
+    culoare_carte[Culoare()] == "INIMA ROSIE" ? width = 5
+    : culoare_carte[Culoare()] == "INIMA NEAGRA" ? width = 4
+    : culoare_carte[Culoare()] == "ROMB" ? width = 12
+    : culoare_carte[Culoare()] == "TREFLA" ? width = 10 : 0;
+    valoare_carte[Valoare()] == "10" ? width-- : 0;
     
     cout << endl; cout << valoare_carte[Valoare()] << " DE " << culoare_carte[Culoare()] << setw(width) << " ";
     //delete ' << " "' for align with ":";
+}
+
+void Pachet_Carti::Bet(int n)
+{
+    string user_input;
+
+    for(int i = 0; i < n; i++)
+    {
+        cout << "Bet jucator " << i + 1 << " : ";
+        while(1)
+        {
+            getline(cin, user_input);
+            stringstream convert(user_input);
+            if(convert >> suma_bet[i] &&!(convert >> user_input))
+            {
+                break;
+            }
+            else
+            {
+            cin.clear();
+            cout << "Bet-ul trebuie sa fie numar real, reintrodu un numar : ";
+            }
+        }
+    };
+
+    nr_jucatori = n;
 }
 
 int main (void)
