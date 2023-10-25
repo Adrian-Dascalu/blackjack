@@ -10,7 +10,6 @@
 #include <string.h>
 #include <sstream>
 
-
 using namespace std;
 
 const char* valoare_carte[13] = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"};
@@ -50,15 +49,11 @@ class Pachet_Carti
 
     private:
         Carte_De_Joc carti[52];
-
-        int next_card;
         
     public:
         void Creeaza_Pachet(void)
         {
-            for (int i = 0; i < 52; i++) carti[i].Seteaza(i);
-
-            next_card = 0;
+            for(int i = 0; i < 52; i++) carti[i].Seteaza(i);
         }
 
         void Amesteca(void)
@@ -82,23 +77,27 @@ class Pachet_Carti
         class JucatorSplit
         {
             private:
-                Carte_De_Joc carte_mana[8][10];
+                Carte_De_Joc carte_mana[2][10];
 
             public:
-                JucatorSplit(Carte_De_Joc carte_manaa, int i, int carti_impartite, Carte_De_Joc carti[])
+                JucatorSplit(Carte_De_Joc carte_manaa, int carti_impartite, Carte_De_Joc carti[])
                 {
                     carte_mana[0][0] = carte_manaa;
+                    carte_mana[0][0].Carte_De_Joc::Display();
                     carte_mana[0][1] = carti[carti_impartite];
+                    carte_mana[0][1].Carte_De_Joc::Display();
                 }
-
-                ~JucatorSplit(){}
-        
-                void hitsplit(int i)
+                JucatorSplit(Carte_De_Joc carte_manaa, int carti_impartite, Carte_De_Joc carti[], int j)
                 {
-                    //hit(i, 0);
-
-                    //carte_mana[0][0] = 
+                    carte_mana[1][0] = carte_manaa;
+                    carte_mana[1][0].Carte_De_Joc::Display();
+                    carte_mana[1][1] = carti[carti_impartite];
+                    carte_mana[1][1].Carte_De_Joc::Display();
                 }
+                ~JucatorSplit(){}
+
+                void hitsplit(Carte_De_Joc carti_manaaa, int i);
+                void show();
         };
 
         void Bet(int n);
@@ -197,22 +196,24 @@ class Pachet_Carti
 
                 return;
             }
-            else if((strcmp(tura, "split") == 0) && (nr_carte[i] == 2))
+            else if((strcmp(tura, "split") == 0) && (nr_carte[i] == 2) && (carti_mana[i][0].transf() == carti_mana[i][1].transf()))
             {
                 if(carti_mana[i][0].transf() == carti_mana[i][1].transf())
                 {
-                    //JucatorSplit jucatorsplit1(carti_mana[i][0]);
                     nr_asi1[i] = 0;
                     cout << "\nprima mana : \n";
                     suma_mana[i] = carti_mana[i][0].transf();
                     carti_split[i][0][0] = carti_mana[i][0];
-                    hitsplit1(i);
+                    JucatorSplit jucator1(carti_mana[i][0], carti_impartite, carti, 1);
+                    carti_impartite++;
 
                     nr_asi1[1] = 0;
-                    cout << "\na doua mana : \n";
+                    cout << "\n\na doua mana : \n";
                     suma_mana[i] = carti_mana[i][1].transf();
                     carti_split[i][1][0] = carti_mana[i][1];
-                    hitsplit2(i);
+                    JucatorSplit jucator2(carti_mana[i][1], carti_impartite, carti);
+                    carti_impartite++;
+                    cout << endl << endl;
                 }
                 else
                 {
@@ -227,8 +228,6 @@ class Pachet_Carti
 
                 alege(i);
             }
-
-            return;
         }
 
         void hit(int i, int d)  
@@ -339,16 +338,6 @@ class Pachet_Carti
             if(!d) alege(i);
         }
 
-        void hitsplit1(int i)
-        {
-
-        }
-
-        void hitsplit2(int i)
-        {
-
-        }
-
         void mana()
         {
             for(int i = 0; i < nr_jucatori; i++)
@@ -397,7 +386,7 @@ class Pachet_Carti
                 {
                     blackjack[i] = 1;
                 }
-
+//
                 for(int j = 0; j < nr_jucatori; j++)
                 {
                     if(bust[j])
@@ -414,7 +403,7 @@ class Pachet_Carti
                 {
                     dealer_win = 0;
                 }
-
+//
                 for(int j = 0; j < nr_jucatori; j++)
                 {
                     if(suma_mana[i] > suma_mana[j])
@@ -424,7 +413,7 @@ class Pachet_Carti
                         break;
                     }
                 }
-                
+//
                 if((dealer_win == 0) && (bust[i] == 0) && (blackjack[i] == 0) && (suma_mana[i] < 17) || (suma_mana[i] < 11))
                 {
                     carti_mana[i][nr_carte[i]] = carti[carti_impartite];
@@ -506,7 +495,7 @@ class Pachet_Carti
                 carti_mana[nr_jucatori][j].Display();
             }
 
-            cout << "Suma : " << suma_mana[i] << "\n--------------------\n\n";
+            cout << "Suma : " << suma_mana[i] << "\n\n--------------------\n\n";
         }
 
         int dealer_win = 0;
@@ -574,54 +563,93 @@ void Pachet_Carti::Bet(int n)
     nr_jucatori = n;
 }
 
+void Pachet_Carti::JucatorSplit::hitsplit(Carte_De_Joc carti_manaaa, int i)
+{
+    //Pachet_Carti jucator1;
+
+    //jucator1.hit(i, 0);
+
+    //carte_mana[0][0] = 
+}
+
+void Pachet_Carti::JucatorSplit::show()
+{
+    carte_mana[0][0].Pachet_Carti::Carte_De_Joc::Display();
+}
+
 int main (void)
 {
-    int n;
-    string user_input;
-   
-    cout << "Numar jucatori : ";
     while(1)
     {
-        getline(cin, user_input);
-        stringstream convert(user_input);
-        if(convert >> n &&!(convert >> user_input) && (n > 0) && (n < 8))
-        {
-            break;
-        }
-        else
-        {
-           cin.clear();
-           cout << "Numarul maxim de jucatori este intre 1 si 7, reintrodu un numar:\n";
-        }
-    }
-
-    cout << endl;
-
-    Pachet_Carti::Carte_De_Joc carte;
-
-    Pachet_Carti blackjack;
-
-    blackjack.Creeaza_Pachet();
-
-   // system("clear");
-
-    blackjack.Amesteca();
-
-   // system("clear");
-
-    blackjack.Bet(n);
-
-   // system("clear");
-
-    blackjack.impartire();
-
-    system("clear");
-
-    blackjack.afisare_masa();
+        int n;
+        string user_input;
     
-    getchar();
+        cout << "Numar jucatori : ";
+        while(1)
+        {
+            getline(cin, user_input);
+            stringstream convert(user_input);
+            if(convert >> n &&!(convert >> user_input) && (n > 0) && (n < 8))
+            {
+                break;
+            }
+            else
+            {
+            cin.clear();
+            cout << "Numarul maxim de jucatori este intre 1 si 7, reintrodu un numar:\n";
+            }
+        }
 
-    system("clear");
+        cout << endl;
 
-    blackjack.mana();
+        Pachet_Carti::Carte_De_Joc carte;
+
+        Pachet_Carti blackjack;
+
+        blackjack.Creeaza_Pachet();
+
+    // system("clear");
+
+        blackjack.Amesteca();
+
+    // system("clear");
+
+        blackjack.Bet(n);
+
+    // system("clear");
+
+        blackjack.impartire();
+
+        system("clear");
+
+        blackjack.afisare_masa();
+        
+        getchar();
+
+        system("clear");
+
+        blackjack.mana();
+
+        char replay;
+
+        cout << "vrei sa continui joaca? y/n\n";
+        while(1)
+        {
+            cin >> replay;
+            getchar();
+            if(replay == 'n')
+            {   
+                break;
+            }
+            else if(replay == 'y')
+                break;
+            else
+                cout << "raspunde!\n";
+        }
+
+        if(replay == 'n') break;
+    }
 }
+
+//#include <unistd.h>
+//write(1, "hello", 5);
