@@ -602,8 +602,6 @@ int main (void)
 
         cout << endl;
 
-        Pachet_Carti::Carte_De_Joc carte;
-
         Pachet_Carti blackjack;
 
         blackjack.Creeaza_Pachet();
