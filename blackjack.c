@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h> 
-#include <conio.h>
 #include <time.h>
 #include <string.h>
 
@@ -8,13 +7,13 @@ const char* valoare_carte[13] = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "
 
 const char* culoare_carte[4] = {"ROMB", "INIMA ROSIE", "TREFLA", "INIMA NEAGRA"};
 
-typedef struct Carte_De_Joc
+typedef struct Playing_Card
 {
     int valoare;
     int culoare;
-} Carte_De_Joc;
+} Playing_Card;
 
-typedef struct Pachet_Carti
+typedef struct Playing_Deck
 {
     int nr_asi[16];
     int nr_asi1[16];
@@ -29,64 +28,76 @@ typedef struct Pachet_Carti
     int nr_jucatori;
     int jucator_split[8];
 
-    Carte_De_Joc carti[52];
+    Playing_Card carti[52 * 6];
 
-    Carte_De_Joc carti_mana[16][10];
-} Pachet_Carti;
+    Playing_Card carti_mana[16][10];
+} Playing_Deck;
 
-void Alege(Pachet_Carti * pachet, int i);
-void Hit(Pachet_Carti * pachet, int i, int d);
-void End_Game(Pachet_Carti * pachet);
-void Play_Split(Pachet_Carti * pachet, int i, int d);
-void Results(Pachet_Carti * pachet);
+void select(Playing_Deck * pachet, int i);
+void hit(Playing_Deck * pachet, int i, int d);
+void endGame(Playing_Deck * pachet);
+void playSplit(Playing_Deck * pachet, int i, int d);
+void results(Playing_Deck * pachet);
 
-void Seteaza(Carte_De_Joc * carte, int x)
+void initCards(Playing_Card * carte, int x)
 {
     carte -> valoare = x % 13;
     carte -> culoare = x / 13;
 }
 
-int Valoare(Carte_De_Joc * carte)
+int getCardValuea(Playing_Card * carte)
 {
     return carte -> valoare;
 }
 
-int Culoare(Carte_De_Joc * carte)
+int getCardColor(Playing_Card * carte)
 {
     return carte -> culoare;
 }
 
-void Display(Carte_De_Joc * carte)
+void Display(Playing_Card * carte)
 {
     int width = 7;
 
-    culoare_carte[Culoare(carte)] == "INIMA ROSIE" ? width = 5 :
-    culoare_carte[Culoare(carte)] == "INIMA NEAGRA" ? width = 4 :
-    culoare_carte[Culoare(carte)] == "ROMB" ? width = 12 :
-    culoare_carte[Culoare(carte)] == "TREFLA" ? width = 10 : 0;
+    culoare_carte[getCardColor(carte)] == "INIMA ROSIE" ? width = 5 :
+    culoare_carte[getCardColor(carte)] == "INIMA NEAGRA" ? width = 4 :
+    culoare_carte[getCardColor(carte)] == "ROMB" ? width = 12 :
+    culoare_carte[getCardColor(carte)] == "TREFLA" ? width = 10 : 0;
 
-    valoare_carte[Valoare(carte)] == "10" ? width-- : 0;
+    valoare_carte[getCardValuea(carte)] == "10" ? width-- : 0;
 
     printf("\n%s DE %s%*s", valoare_carte[carte -> valoare], culoare_carte[carte ->culoare], width, "");
 }
 
-int Transf(Carte_De_Joc * carte)
+int Transf(Playing_Card * carte)
 {
-    if((Valoare(carte) > 8) && (Valoare(carte) < 12)) return 10;
-    else if(Valoare(carte) == 12) return 11;
-    else return Valoare(carte) + 2;
+    if((getCardValuea(carte) > 8) && (getCardValuea(carte) < 12))
+    {
+        return 10;
+    }
+    else if(getCardValuea(carte) == 12)
+    {
+        return 11;
+    }
+    else
+    {
+        return getCardValuea(carte) + 2;
+    }
 }
 
-void Creeaza_Pachet(Pachet_Carti * pachet)
+void generatePlayingDecks(Playing_Deck * pachet)
 {
-    for(int i = 0; i < 52; i++) Seteaza(&(pachet -> carti[i]), i);
+    for(int i = 0; i < 52 * 6; i++)
+    {
+        initCards(&(pachet -> carti[i]), i);
+    }
 }
 
-void Amesteca(Pachet_Carti * pachet)
+void Amesteca(Playing_Deck * pachet)
 {
     int i, k;
 
-    Carte_De_Joc temp;
+    Playing_Card temp;
 
     srand(time(NULL));
 
@@ -100,7 +111,7 @@ void Amesteca(Pachet_Carti * pachet)
     }
 }
 
-void Bet(Pachet_Carti * pachet, int n)
+void Bet(Playing_Deck * pachet, int n)
 {
     int isChar= 0;
     int IntNum = 0;
@@ -140,7 +151,7 @@ void Bet(Pachet_Carti * pachet, int n)
     pachet -> nr_jucatori = n;
 }
 
-void Impartire(Pachet_Carti * pachet)
+void Impartire(Playing_Deck * pachet)
 {
     for(int i = 0; i <= pachet -> nr_jucatori; i++)
     {
@@ -176,9 +187,12 @@ void Impartire(Pachet_Carti * pachet)
     }
 }
 
-void Afisare_Masa(Pachet_Carti * pachet)
+void Afisare_Masa(Playing_Deck * pachet)
 {
-    system("clear");
+    for(int i = 0; i < 5; i++)
+    {
+        printf("\n");
+    }
 
     for(int i = 0; i < pachet -> nr_jucatori; i++)
     {
@@ -203,10 +217,13 @@ void Afisare_Masa(Pachet_Carti * pachet)
 
     getchar();
 
-    system("clear");
+    for(int i = 0; i < 5; i++)
+    {
+        printf("\n");
+    }
 }
 
-void Mana_Jucator(Pachet_Carti * pachet, int i)
+void playerHand(Playing_Deck * pachet, int i)
 {
     Display(&(pachet -> carti_mana[i][0]));
 
@@ -217,7 +234,7 @@ void Mana_Jucator(Pachet_Carti * pachet, int i)
     printf("Suma mana : %d", pachet -> sume_player_hand[i]);
 }
 
-void Mana(Pachet_Carti * pachet)
+void playerTurn(Playing_Deck * pachet)
 {
     for(int i = 0; i < pachet -> nr_jucatori; i++)
     {
@@ -244,7 +261,7 @@ void Mana(Pachet_Carti * pachet)
         }
         else
         {
-            Alege(pachet, i);
+            select(pachet, i);
         }
     }
     
@@ -252,12 +269,15 @@ void Mana(Pachet_Carti * pachet)
     getchar();
     getchar();
 
-    system("clear");
+    for(int i = 0; i < 5; i++)
+    {
+        printf("\n");
+    }
 
-    End_Game(pachet);
+    endGame(pachet);
 }
 
-void Alege(Pachet_Carti * pachet, int i)
+void select(Playing_Deck * pachet, int i)
 {
     if(pachet -> nr_carte[i] == 2)
     {
@@ -279,7 +299,7 @@ void Alege(Pachet_Carti * pachet, int i)
 
     if(strcmp(tura, "hit") == 0)
     {
-        Hit(pachet, i, 0);
+        hit(pachet, i, 0);
     }
     else if(strcmp(tura, "stay") == 0)
     {
@@ -289,13 +309,13 @@ void Alege(Pachet_Carti * pachet, int i)
     {
         pachet -> player_bet[i] *= 2;
         
-        Hit(pachet, i, 1);
+        hit(pachet, i, 1);
     }
     else if((strcmp(tura, "double") == 0))
     {
         printf("\nNu poti da double!\n");
         
-        Alege(pachet, i);
+        select(pachet, i);
     }
     else if((strcmp(tura, "split") == 0) && (pachet -> nr_carte[i] == 2) &&
      (Transf(&(pachet -> carti_mana[i][0])) == Transf(&(pachet -> carti_mana[i][1]))))
@@ -316,24 +336,24 @@ void Alege(Pachet_Carti * pachet, int i)
 
         printf("\n");
 
-        Play_Split(pachet, i, 0);
-        Play_Split(pachet, i + pachet -> nr_jucatori + 1, 1);
+        playSplit(pachet, i, 0);
+        playSplit(pachet, i + pachet -> nr_jucatori + 1, 1);
     }
     else if((strcmp(tura, "split") == 0))
     {
         printf("\nNu poti da split!\n");
 
-        Alege(pachet, i);
+        select(pachet, i);
     }
     else
     {
         printf("\nCe vrei sa faci?\n");
 
-        Alege(pachet, i);
+        select(pachet, i);
     }
 }
 
-void Alege_Split(Pachet_Carti * pachet, int i)
+void splitPlay(Playing_Deck * pachet, int i)
 {
     if(pachet -> nr_carte[i] == 2)
     {
@@ -355,7 +375,7 @@ void Alege_Split(Pachet_Carti * pachet, int i)
 
     if(strcmp(tura, "hit") == 0)
     {
-        Hit(pachet, i, 0);
+        hit(pachet, i, 0);
     }
     else if(strcmp(tura, "stay") == 0)
     {
@@ -365,23 +385,23 @@ void Alege_Split(Pachet_Carti * pachet, int i)
     {
         pachet -> player_bet[i] *= 2;
         
-        Hit(pachet, i, 1);
+        hit(pachet, i, 1);
     }
     else if((strcmp(tura, "double") == 0))
     {
         printf("\nNu poti da double!\n");
         
-        Alege_Split(pachet, i);
+        splitPlay(pachet, i);
     }
     else
     {
         printf("\nCe vrei sa faci?\n");
 
-        Alege_Split(pachet, i);
+        splitPlay(pachet, i);
     }
 }
 
-void Play_Split(Pachet_Carti * pachet, int i, int d)
+void playSplit(Playing_Deck * pachet, int i, int d)
 {
     if(Transf(&(pachet -> carti_mana[i][0])) == 11)
     {
@@ -482,7 +502,7 @@ void Play_Split(Pachet_Carti * pachet, int i, int d)
     
     printf("\nCarti :\n");
 
-    Mana_Jucator(pachet, i);
+    playerHand(pachet, i);
     
     if(pachet -> sume_player_hand[i] == 21)
     {
@@ -495,10 +515,10 @@ void Play_Split(Pachet_Carti * pachet, int i, int d)
 
     pachet -> nr_carte[i] = 2;
 
-    Alege_Split(pachet, i);
+    splitPlay(pachet, i);
 }
 
-void Hit(Pachet_Carti * pachet, int i, int d)
+void hit(Playing_Deck * pachet, int i, int d)
 {
     pachet -> carti_mana[i][pachet -> nr_carte[i]] = pachet -> carti[pachet -> carti_impartite];
     pachet -> sume_player_hand[i] += Transf(&(pachet -> carti_mana[i][pachet -> nr_carte[i]]));
@@ -562,7 +582,7 @@ void Hit(Pachet_Carti * pachet, int i, int d)
 
                 printf("Suma : %d\n", pachet -> sume_player_hand[i]);
 
-                if(!d) Alege(pachet, i);
+                if(!d) select(pachet, i);
 
                 if(d == 1) printf("\n--------------------\n\n");
 
@@ -607,11 +627,11 @@ void Hit(Pachet_Carti * pachet, int i, int d)
 
         if(d == 1) printf("\n--------------------\n\n");
 
-        if(!d) Alege(pachet, i);
+        if(!d) select(pachet, i);
     }
 }
 
-void End_Game(Pachet_Carti * pachet)
+void endGame(Playing_Deck * pachet)
 {
     int i = pachet -> nr_jucatori;
 
@@ -718,10 +738,10 @@ void End_Game(Pachet_Carti * pachet)
         }
     }
 
-    Results(pachet);
+    results(pachet);
 }
 
-void Results(Pachet_Carti * pachet)
+void results(Playing_Deck * pachet)
 {
     printf("Results : \n\n");
 
@@ -851,90 +871,115 @@ void Results(Pachet_Carti * pachet)
     printf("Suma : %d\n\n", pachet -> sume_player_hand[pachet -> nr_jucatori]);
 }
 
-int main()
+void playersNumber(Playing_Deck * pachet)
 {
+    int n;
+
+    char str[100];
+
+    printf("Numar Jucatori : ");
+
     while(1)
     {
-        system("clear");
+        scanf("%s", str);
+        
+        int isChar = 0;
 
-        int n;
-
-        char replay[100];
-
-        char str[100];
-
-        printf("Numar Jucatori : ");
-
-        while(1)
+        for(int j = 0; j < strlen(str); j++)
         {
-            scanf("%s", str);
-            
-            int isChar = 0;
-
-            for(int j = 0; j < strlen(str); j++)
+            if(!((str[j] >= '0') && (str[j] <= '9')))
             {
-                if(!((str[j] >= '0') && (str[j] <= '9')))
-                {
-                    isChar++;
-                }
-            }
-
-            n = atoi(str);
-
-            if(!isChar && (n > 0) && (n <= 7))
-            {
-                break;
-            }
-            else
-            {
-                printf("Numarul de jucatori trebuie sa fie intre 1 si 7, reintrodu un numar : ");
+                isChar++;
             }
         }
 
-        Pachet_Carti bicycle;
-        
-        memset(&bicycle, 0, sizeof(bicycle));
+        n = atoi(str);
 
-        Creeaza_Pachet(&bicycle);
-
-        Amesteca(&bicycle);
-
-        Bet(&bicycle, n);
-
-        Impartire(&bicycle);
-
-        Afisare_Masa(&bicycle);
-
-        Mana(&bicycle);
-
-        printf("Vrei sa continui sa te joci? [y/n] ");
-        
-        while(1)
+        if(!isChar && (n > 0) && (n <= 7))
         {
-            scanf("%s", replay);
+            break;
+        }
+        else
+        {
+            printf("Numarul de jucatori trebuie sa fie intre 1 si 7, reintrodu un numar : ");
+        }
+    }
 
-            if(strlen(replay) == 1)
+    pachet -> nr_jucatori = n;
+}
+
+int getPlayersNumber(Playing_Deck * pachet)
+{
+    return pachet -> nr_jucatori;
+}
+
+void playAgain(Playing_Deck * pachet)
+{
+    printf("Vrei sa continui sa te joci? [y/n] ");
+        
+    char replay[100];
+
+    while(1)
+    {
+        scanf("%s", replay);
+
+        if(strlen(replay) == 1)
+        {
+            if(replay[0] == 'n')
             {
-                if(replay[0] == 'n')
-                {
-                    break;
-                }
-                else if(replay[0] == 'y')
-                {
-                    break;
-                }
-                else
-                {
-                    printf("Raspunde cu 'y' sau 'n'!\n");
-                }
+                break;
+            }
+            else if(replay[0] == 'y')
+            {
+                break;
             }
             else
             {
                 printf("Raspunde cu 'y' sau 'n'!\n");
             }
         }
+        else
+        {
+            printf("Raspunde cu 'y' sau 'n'!\n");
+        }
+    }
 
-        if(replay[0] == 'n') break;
+    if(replay[0] == 'n')
+    {
+        exit(0);
+    }
+    else
+    {
+        for(int i = 0; i < 5; i++)
+        {
+            printf("\n");
+        }
+    }
+}
+
+int main()
+{
+    while(1)
+    {
+        Playing_Deck bicycle;
+
+        memset(&bicycle, 0, sizeof(bicycle));
+        
+        playersNumber(&bicycle);
+
+        generatePlayingDecks(&bicycle);
+
+        Amesteca(&bicycle);
+
+        Bet(&bicycle,  getPlayersNumber(&bicycle));
+
+        Impartire(&bicycle);
+
+        Afisare_Masa(&bicycle);
+
+        playerTurn(&bicycle);
+
+        playAgain(&bicycle);
     }
 
     return 0;

@@ -1,7 +1,7 @@
 {
     "version": "0.2.0",
     "configurations": [
-        /*{
+        {
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
@@ -11,8 +11,8 @@
             "cwd": "${fileDirname}",
             "environment": [],
             "externalConsole": false,
-            "MIMode": "gdb",
-            "miDebuggerPath": "C:\\msys64\\mingw64\\bin\\gdb.exe",
+            "MIMode": "gcc",
+            "miDebuggerPath": "D:\\msys2\\ucrt64\\bin\\gcc.exe",
             "setupCommands": [
                 {
                     "description": "Enable pretty-printing for gdb",
@@ -20,7 +20,7 @@
                     "ignoreFailures": true
                 }
             ]
-        },*/
+        },
         {
             "name": "C/C++: g++.exe build and debug active file",
             "type": "cppdbg",
@@ -32,7 +32,7 @@
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
-            "miDebuggerPath": "C:\\msys64\\mingw64\\bin\\gdb.exe",
+            "miDebuggerPath": "D:\\msys2\\ucrt64\\bin\\gdb.exe",
             "setupCommands": [
                 {
                     "description": "Enable pretty-printing for gdb",
