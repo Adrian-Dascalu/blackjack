@@ -2,35 +2,50 @@
 #include <stdlib.h> 
 #include <time.h>
 #include <string.h>
+#include <stdint.h>
+
+#define DECKS_CARDS_PLAYING 6
+#define DECK_CARDS 52
+#define DECK_CARDS_VALUE 13
+#define DECK_CARDS_COLOR 4
+
+#define MAX_PLAYERS 8
+#define MAX_PLAYER_CARDS 10
 
 const char* card_value[13] = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "JACK", "QUEEN", "KING", "ACE"};
 
 const char* card_color[4] = {"DIAMONDS", "HEARTS", "CLUBS", "SPADES"};
 
-typedef struct Playing_Card
+typedef struct
 {
-    int value;
-    int color;
+    uint64_t player_money;
+    uint64_t player_bet;
+} Player;
+
+typedef struct
+{
+    uint8_t value;
+    uint8_t color;
 } Playing_Card;
 
-typedef struct Playing_Deck
+typedef struct
 {
-    int aces_counter[16];
-    int aces_1_counter[16];
-    int player_cards_counter[16];
-    int player_bet[16];
-    int sum_player_hand[16];
-    int lose[16];
-    int bust[16];
-    int blackjack[16];
+    uint8_t aces_counter[MAX_PLAYER_CARDS * 2];
+    uint8_t aces_1_counter[MAX_PLAYER_CARDS * 2];
+    uint8_t player_cards_counter[MAX_PLAYER_CARDS * 2];
+    uint64_t player_bet[MAX_PLAYERS * 2];
+    int sum_player_hand[MAX_PLAYERS * 2];
+    int lose[MAX_PLAYERS * 2];
+    int bust[MAX_PLAYERS * 2];
+    int blackjack[MAX_PLAYERS * 2];
     int dealer_win;
     int dealt_cards_counter;
-    int players_counter;
-    int player_split[8];
+    uint8_t players_counter;
+    int player_split[MAX_PLAYERS];
 
-    Playing_Card deck_cards[52 * 6];
+    Playing_Card deck_cards[DECK_CARDS * DECKS_CARDS_PLAYING];
 
-    Playing_Card hand_cards[16][10];
+    Playing_Card hand_cards[MAX_PLAYERS * 2][MAX_PLAYER_CARDS];
 } Playing_Deck;
 
 void select(Playing_Deck * deck, int i);
@@ -41,8 +56,8 @@ void results(Playing_Deck * deck);
 
 void initCards(Playing_Card * card, int x)
 {
-    card -> value = x % 13;
-    card -> color = x / 13 % 4;
+    card -> value = x % DECK_CARDS_VALUE;
+    card -> color = x / DECK_CARDS_VALUE % DECK_CARDS_COLOR;
 }
 
 int getCardValue(Playing_Card * card)
@@ -509,7 +524,7 @@ void playSplit(Playing_Deck * deck, int i, int d)
     
     if(deck -> sum_player_hand[i] == 21)
     {
-        printf("BLACKJACK!\n\n");
+        printf("\n\nBLACKJACK!\n\n");
 
         deck -> blackjack[i] = 1;
 
@@ -952,7 +967,13 @@ int main()
 {
     while(1)
     {
+        Player player;
+
+        memset(&player, 0, sizeof(player));
+
         Playing_Deck bicycle;
+
+        //Playing_Player player;
 
         memset(&bicycle, 0, sizeof(bicycle));
         
