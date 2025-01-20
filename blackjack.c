@@ -90,13 +90,13 @@ void displayCard(Playing_Card * card)
 
 int transformCardValue(Playing_Card * card)
 {
-    if((getCardValue(card) > 8) && (getCardValue(card) < 12))
-    {
-        return 10;
-    }
-    else if(getCardValue(card) == 12)
+    if(getCardValue(card) == 12)
     {
         return 11;
+    }
+    else if(getCardValue(card) > 8)
+    {
+        return 10;
     }
     else
     {
