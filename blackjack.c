@@ -4,8 +4,9 @@
 #include <string.h>
 #include <stdint.h>
 
-#define DECKS_CARDS_PLAYING 6
+#define DECKS_PLAYING 6
 #define DECK_CARDS 52
+#define DECK_CARDS_PLAYING (DECKS_PLAYING * DECK_CARDS)
 #define DECK_CARDS_VALUE 13
 #define DECK_CARDS_COLOR 4
 
@@ -30,9 +31,9 @@ typedef struct
 
 typedef struct
 {
-    uint8_t aces_counter[MAX_PLAYER_CARDS * 2];
-    uint8_t aces_1_counter[MAX_PLAYER_CARDS * 2];
-    uint8_t player_cards_counter[MAX_PLAYER_CARDS * 2];
+    uint8_t aces_counter[MAX_PLAYERS * 2];
+    uint8_t aces_1_counter[MAX_PLAYERS * 2];
+    uint8_t player_cards_counter[MAX_PLAYERS * 2];
     uint64_t player_bet[MAX_PLAYERS * 2];
     int sum_player_hand[MAX_PLAYERS * 2];
     int lose[MAX_PLAYERS * 2];
@@ -43,7 +44,7 @@ typedef struct
     uint8_t players_counter;
     int player_split[MAX_PLAYERS];
 
-    Playing_Card deck_cards[DECK_CARDS * DECKS_CARDS_PLAYING];
+    Playing_Card deck_cards[DECK_CARDS_PLAYING];
 
     Playing_Card hand_cards[MAX_PLAYERS * 2][MAX_PLAYER_CARDS];
 } Playing_Deck;
@@ -74,16 +75,16 @@ void displayCard(Playing_Card * card)
 {
     int width = 7;
 
-    card_color[getCardColor(card)] == "HEARTS" ? width = 9 :
-    card_color[getCardColor(card)] == "SPADES" ? width = 9 :
-    card_color[getCardColor(card)] == "DIAMONDS" ? width = 7 :
-    card_color[getCardColor(card)] == "CLUBS" ? width = 10 : 0;
+    strcmp(card_color[getCardColor(card)], "HEARTS") == 0 ? width = 9 :
+    strcmp(card_color[getCardColor(card)], "SPADES") == 0 ? width = 9 :
+    strcmp(card_color[getCardColor(card)], "DIAMONDS") == 0 ? width = 7 :
+    strcmp(card_color[getCardColor(card)], "CLUBS") == 0 ? width = 10 : 0;
 
-    card_value[getCardValue(card)] == "10" ? width-- :
-    card_value[getCardValue(card)] == "JACK" ? width-= 3 :
-    card_value[getCardValue(card)] == "QUEEN" ? width-= 4 :
-    card_value[getCardValue(card)] == "KING" ? width-= 3 :
-    card_value[getCardValue(card)] == "ACE" ? width-= 2 : 0;
+    strcmp(card_value[getCardValue(card)], "10") == 0 ? width-- :
+    strcmp(card_value[getCardValue(card)], "JACK") == 0 ? width-= 3 :
+    strcmp(card_value[getCardValue(card)], "QUEEN") == 0 ? width-= 4 :
+    strcmp(card_value[getCardValue(card)], "KING") == 0 ? width-= 3 :
+    strcmp(card_value[getCardValue(card)], "ACE") == 0 ? width-= 2 : 0;
 
     printf("\n%s OF %s%*s", card_value[card -> value], card_color[card ->color], width, "");
 }
@@ -106,7 +107,7 @@ int transformCardValue(Playing_Card * card)
 
 void generatePlayingDecks(Playing_Deck * deck)
 {
-    for(int i = 0; i < 52 * 6; i++)
+    for(int i = 0; i < DECK_CARDS_PLAYING; i++)
     {
         initCards(&(deck -> deck_cards[i]), i);
     }
@@ -120,9 +121,9 @@ void shuffleCards(Playing_Deck * deck)
 
     srand(time(NULL));
 
-    for(i = 0; i < 52 * 6; i++)
+    for(i = 0; i < DECK_CARDS_PLAYING; i++)
     {
-        k = rand() % 52 * 6;
+        k = rand() % DECK_CARDS_PLAYING;
 
         temp = deck -> deck_cards[i];
         deck -> deck_cards[i] = deck -> deck_cards[k];
@@ -141,7 +142,7 @@ void placeBet(Playing_Deck * deck, int n)
     {
         printf("Bet Player %d : ", i + 1);
 
-        scanf("%s", str);
+        scanf_s("%s", str);
 
         getchar();
 
@@ -219,7 +220,7 @@ void showTable(Playing_Deck * deck)
 
         displayCard(&(deck -> hand_cards[i][0]));
 
-        printf("Bet : %d", deck -> player_bet[i]);
+        printf("Bet : %llu", deck -> player_bet[i]);
 
         displayCard(&(deck -> hand_cards[i][1]));
 
@@ -246,7 +247,7 @@ void playerHand(Playing_Deck * deck, int i)
 {
     displayCard(&(deck -> hand_cards[i][0]));
 
-    printf("Bet : %d", deck -> player_bet[i]);
+    printf("Bet : %llu", deck -> player_bet[i]);
 
     displayCard(&(deck -> hand_cards[i][1]));
 
@@ -261,7 +262,7 @@ void playerTurn(Playing_Deck * deck)
 
         displayCard(&(deck -> hand_cards[i][0]));
 
-        printf("Bet : %d", deck -> player_bet[i]);
+        printf("Bet : %llu", deck -> player_bet[i]);
 
         displayCard(&(deck -> hand_cards[i][1]));
 
@@ -313,7 +314,7 @@ void select(Playing_Deck * deck, int i)
 
     char tura[10];
 
-    scanf("%s", tura);
+    scanf_s("%s", tura);
 
     if(strcmp(tura, "hit") == 0)
     {
@@ -384,7 +385,7 @@ void splitTurn(Playing_Deck * deck, int i)
 
     char tura[10];
 
-    scanf("%s", tura);
+    scanf_s("%s", tura);
 
     if(i < deck -> players_counter - 1)
     {
@@ -452,7 +453,7 @@ void playSplit(Playing_Deck * deck, int i, int d)
 
     displayCard(&(deck -> hand_cards[i][0]));
 
-    printf("Bet : %d\n", deck -> player_bet[i]);
+    printf("Bet : %llu\n", deck -> player_bet[i]);
         
     printf("\nRaise bet? [y/n] ");
 
@@ -460,7 +461,7 @@ void playSplit(Playing_Deck * deck, int i, int d)
 
     while(1)
     {
-        scanf("%s", r_bet);
+        scanf_s("%s", r_bet);
 
         if(strlen(r_bet) == 1)
         {
@@ -491,7 +492,7 @@ void playSplit(Playing_Deck * deck, int i, int d)
 
         while(1)
         {
-            scanf("%s", temp);
+            scanf_s("%s", temp);
 
             int isChar = 0;
 
@@ -766,27 +767,27 @@ void results(Playing_Deck * deck)
 
             if(deck -> bust[i])
             {
-                printf("Bust! You Lost %d\n\n", deck -> player_bet[i]);
+                printf("Bust! You Lost %llu\n\n", deck -> player_bet[i]);
             }
             else if((deck -> blackjack[i]) && (!deck -> blackjack[deck -> players_counter]))
             {
-                printf("BLACKJACK! You Won %d\n\n", deck -> player_bet[i] * 2);
+                printf("BLACKJACK! You Won %llu\n\n", deck -> player_bet[i] * 2);
             }
-            else if((deck -> sum_player_hand[i] == deck -> sum_player_hand[deck -> players_counter]))
+            else if(deck -> sum_player_hand[i] == deck -> sum_player_hand[deck -> players_counter])
             {
-                printf("Draw! You received back : %d\n\n", deck -> player_bet[i]);
+                printf("Draw! You received back : %llu\n\n", deck -> player_bet[i]);
             }
             else if(deck -> sum_player_hand[i] > deck -> sum_player_hand[deck -> players_counter])
             {
-                printf("You Won %d\n\n", deck -> player_bet[i] * 2);
+                printf("You Won %llu\n\n", deck -> player_bet[i] * 2);
             }
             else if(deck -> bust[deck -> players_counter])
             {
-                printf("You Won %d\n\n", deck -> player_bet[i] * 2);
+                printf("You Won %llu\n\n", deck -> player_bet[i] * 2);
             }
             else
             {
-                printf("You Lost %d\n\n", deck -> player_bet[i]);
+                printf("You Lost %llu\n\n", deck -> player_bet[i]);
             }
 
             printf("--------------------\n\n");
@@ -802,27 +803,27 @@ void results(Playing_Deck * deck)
 
             if(deck -> bust[i + deck -> players_counter + 1])
             {
-                printf("Bust! You Lost %d\n\n", deck -> player_bet[i + deck -> players_counter + 1]);
+                printf("Bust! You Lost %llu\n\n", deck -> player_bet[i + deck -> players_counter + 1]);
             }
             else if((deck -> blackjack[i + deck -> players_counter + 1]) && (!deck -> blackjack[deck -> players_counter]))
             {
-                printf("BLACKJACK! You Won %d\n\n", deck -> player_bet[i + deck -> players_counter + 1] * 2);
+                printf("BLACKJACK! You Won %llu\n\n", deck -> player_bet[i + deck -> players_counter + 1] * 2);
             }
-            else if((deck -> sum_player_hand[i + deck -> players_counter + 1] == deck -> sum_player_hand[deck -> players_counter]))
+            else if(deck -> sum_player_hand[i + deck -> players_counter + 1] == deck -> sum_player_hand[deck -> players_counter])
             {
-                printf("Draw! You received back : %d\n\n", deck -> player_bet[i + deck -> players_counter + 1]);
+                printf("Draw! You received back : %llu\n\n", deck -> player_bet[i + deck -> players_counter + 1]);
             }
             else if(deck -> sum_player_hand[i + deck -> players_counter + 1] > deck -> sum_player_hand[deck -> players_counter])
             {
-                printf("You Won %d\n\n", deck -> player_bet[i + deck -> players_counter + 1] * 2);
+                printf("You Won %llu\n\n", deck -> player_bet[i + deck -> players_counter + 1] * 2);
             }
             else if(deck -> bust[deck -> players_counter])
             {
-                printf("You Won %d\n\n", deck -> player_bet[i + deck -> players_counter + 1] * 2);
+                printf("You Won %llu\n\n", deck -> player_bet[i + deck -> players_counter + 1] * 2);
             }
             else
             {
-                printf("You Lost %d\n\n", deck -> player_bet[i + deck -> players_counter + 1]);
+                printf("You Lost %llu\n\n", deck -> player_bet[i + deck -> players_counter + 1]);
             }
 
             printf("--------------------\n\n");
@@ -840,27 +841,27 @@ void results(Playing_Deck * deck)
 
             if(deck -> bust[i])
             {
-                printf("Bust! You Lost %d\n\n", deck -> player_bet[i]);
+                printf("Bust! You Lost %llu\n\n", deck -> player_bet[i]);
             }
             else if((deck -> blackjack[i]) && (!deck -> blackjack[deck -> players_counter]))
             {
-                printf("BLACKJACK! You Won %d\n\n", deck -> player_bet[i] * 2);
+                printf("BLACKJACK! You Won %llu\n\n", deck -> player_bet[i] * 2);
             }
-            else if((deck -> sum_player_hand[i] == deck -> sum_player_hand[deck -> players_counter]))
+            else if(deck -> sum_player_hand[i] == deck -> sum_player_hand[deck -> players_counter])
             {
-                printf("Draw! You received back : %d\n\n", deck -> player_bet[i]);
+                printf("Draw! You received back : %llu\n\n", deck -> player_bet[i]);
             }
             else if(deck -> sum_player_hand[i] > deck -> sum_player_hand[deck -> players_counter])
             {
-                printf("You Won %d\n\n", deck -> player_bet[i] * 2);
+                printf("You Won %llu\n\n", deck -> player_bet[i] * 2);
             }
             else if(deck -> bust[deck -> players_counter])
             {
-                printf("You Won %d\n\n", deck -> player_bet[i] * 2);
+                printf("You Won %llu\n\n", deck -> player_bet[i] * 2);
             }
             else
             {
-                printf("You Lost %d\n\n", deck -> player_bet[i]);
+                printf("You Lost %llu\n\n", deck -> player_bet[i]);
             }
 
             printf("--------------------\n\n");
@@ -887,7 +888,7 @@ void playersNumber(Playing_Deck * deck)
     {
         printf("Number of Players : ");
         
-        scanf("%s", str);
+        scanf_s("%s", str);
         
         int isChar = 0;
 
@@ -927,7 +928,7 @@ void playAgain(Playing_Deck * deck)
 
     while(1)
     {
-        scanf("%s", replay);
+        scanf_s("%s", replay);
 
         if(strlen(replay) == 1)
         {
@@ -976,7 +977,7 @@ int main()
         //Playing_Player player;
 
         memset(&bicycle, 0, sizeof(bicycle));
-        
+
         playersNumber(&bicycle);
 
         generatePlayingDecks(&bicycle);
